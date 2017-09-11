@@ -2,11 +2,12 @@ import math
 import numpy as np
 import pandas as pd
 
+from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_iris
 
 # Ирисы
-def l1_iris():
+def get_iris():
     print('Получение данных об ирисах...')
     iris = load_iris()
     x = iris.data
@@ -27,14 +28,15 @@ def liklihood(x, m, d):
 
 # Получение мат. ожидания и дисперсии для каждого класса
 def mu_sigma_by_class(c_dict):
+    print('- определение мат. ожидания и дисперсии для классов...')
     ms_dict = {}
     for class_name, attributes in c_dict.items():
         ms_dict[class_name] = mu_sigma(attributes)
     return ms_dict
 
 # Формирование словаря классов
-def l1_class_dictionary(attributes, classes):
-    print('- Формирование словаря классов...')
+def class_dictionary(attributes, classes):
+    print('- формирование словаря классов...')
     temp = {}
     c_dict = {}
     for i in range(len(attributes)):
@@ -44,7 +46,8 @@ def l1_class_dictionary(attributes, classes):
     return c_dict
 
 # Получение априорных вероятностей для всех классов
-def l1_class_apriory(c_dict):
+def class_apriory(c_dict):
+    print('- получение априорных вероятностей для классов...')
     train_size = float(sum([len(x[0]) for x in list(c_dict.values())]))
     return [len(x[0]) / train_size for x in list(c_dict.values())]
 
@@ -64,26 +67,42 @@ def get_class_number(x, ms_dict):
 
 # Определение вероятности принадлежности объекта к каждому классу
 def classification(x_test, ms_dict):
+    print('- определение наиболее подходящих классов...')
     y_result = []
     for x in x_test:
         y_result.append(get_class_number(x, ms_dict))
     return np.array(y_result)
 
+# Определение точности вычислений
+def accuracy(y_result, y_test):
+    c = 0
+    for i in range(len(y_test)):
+        if(y_result[i] == y_test[i]):
+            c += 1
+    return c / float(len(y_test))
+
 # Основная функция Наивного Байесовского классификатора
 def l1_naive_bayes(x_train, x_test, y_train, y_test):
     # Обучение
-    c_dict = l1_class_dictionary(x_train, y_train) # Разбили на классы
-    p_c = l1_class_apriory(c_dict)  # Определили априорные вероятности классов
-    ms_dict = mu_sigma_by_class(c_dict) # Определили мат. ожидание и дисперсию для каждого класса
+    print('Обучение...')
+    c_dict = class_dictionary(x_train, y_train)
+    p_c = class_apriory(c_dict)
+    ms_dict = mu_sigma_by_class(c_dict)
     
     # Тестирование
-    y_result = classification(x_test, ms_dict)  # Получение результатов классификации
-    # Добавить вычисление точности
+    print('Тестирование...')
+    y_result = classification(x_test, ms_dict)
+    print('Точность разработанного ПО: ', accuracy(y_result, y_test))
+
+    # Сравнение со стандартными инструментами
+    clf = GaussianNB()
+    clf.fit(x_train, y_train)
+    print('Точность стандартных средств: ', clf.score(x_test, y_test))
     return
 
 
 
 def main():
-    l1_naive_bayes(*l1_iris())
+    l1_naive_bayes(*get_iris())
 
 main()
