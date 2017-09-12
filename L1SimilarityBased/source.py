@@ -15,8 +15,8 @@ from sklearn.datasets import load_iris
 # Загрузка данных
 def ml_load(filename):
     print('Загрузка данных из файла...')
-    #return pd.read_csv(filename, header = None).values
-    return pd.read_csv(filename, sep=';').values
+    return pd.read_csv(filename, header = None).values
+    #return pd.read_csv(filename, sep=',').values
 
 # Разделение датасета
 def ml_split(data):
@@ -26,7 +26,7 @@ def ml_split(data):
     #classes = np.ravel(data[:, -1:])
     classes = np.ravel(data[:, -1:].astype(np.int64, copy=False))
     return train_test_split(
-        attributes, classes, test_size=0.3, random_state=0)
+        attributes, classes, test_size=0.3, random_state=42)
     '''
     iris = load_iris()
     x = iris.data
@@ -40,7 +40,6 @@ def nb_standard(x_train, y_train, x_test, y_test):
     clf = GaussianNB()
     clf.fit(x_train, y_train)
     print(clf.predict(x_test))
-    print(y_test)
     print(clf.score(x_test, y_test))
 
 # Прогон стандартной библиотеки для Ближайших Соседей
@@ -53,11 +52,9 @@ def nn_standard(x_train, y_train, x_test, y_test):
 
 
 def main():
-    data = ml_load("data/winequality-red.csv")
+    data = ml_load("data/vehicle.arff")
     x_train, x_test, y_train, y_test = ml_split(data)
-    print(x_train)
-    print(y_train)
-    nb_standard(x_train, list(y_train), x_test, y_test)
+    nb_standard(x_train, y_train, x_test, y_test)
     nn_standard(x_train, y_train, x_test, y_test)
 
 main()
