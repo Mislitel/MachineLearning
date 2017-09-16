@@ -2,7 +2,6 @@ import math
 import numpy as np
 import pandas as pd
 
-from data import get_data
 from data import accuracy
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
@@ -85,10 +84,3 @@ def naive_bayes(x_train, x_test, y_train, y_test):
     clf.fit(x_train, y_train)
     print('Точность стандартных средств: ', clf.score(x_test, y_test))
     return
-
-
-
-def main():
-    naive_bayes(*get_data())
-
-main()

@@ -1,8 +1,6 @@
 import math
 import numpy as np
-import multiprocessing as mp
 
-from data import get_data
 from data import accuracy
 from collections import Counter
 from sklearn.neighbors import KNeighborsClassifier
@@ -37,5 +35,3 @@ def nearest_neighbors(x_train, x_test, y_train, y_test, k):
     clf.fit(x_train, y_train)
     print('Точность стандартных средств: ', clf.score(x_test, y_test))
     return
-
-nearest_neighbors(*get_data(), 5)
