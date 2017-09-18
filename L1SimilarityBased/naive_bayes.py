@@ -77,10 +77,10 @@ def naive_bayes(x_train, x_test, y_train, y_test):
     # Тестирование
     print('Тестирование...')
     y_result = nb_classification(x_test, ms_dict)
-    print('Точность разработанного ПО: ', accuracy(y_result, y_test))
+    print('Точность разработанного ПО: {:.3f}'.format(accuracy(y_result, y_test)))
 
     # Сравнение со стандартными инструментами
     clf = GaussianNB()
     clf.fit(x_train, y_train)
-    print('Точность стандартных средств: ', clf.score(x_test, y_test))
+    print('Точность стандартных средств: {:.3f}'.format(clf.score(x_test, y_test)))
     return
