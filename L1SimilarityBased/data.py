@@ -2,26 +2,6 @@ import numpy as np
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
-from sklearn.datasets import load_iris
-from sklearn.datasets import load_digits
-
-# Ирисы
-def get_iris():
-    print('Получение данных об ирисах...')
-    iris = load_iris()
-    x = iris.data
-    y = iris.target
-    return train_test_split(
-        x, y, test_size=0.33, random_state=42)
-
-# Числа
-def get_digits():
-    print('Получение данных о цифрах...')
-    iris = load_digits()
-    x = iris.data
-    y = iris.target
-    return train_test_split(
-        x, y, test_size=0.33, random_state=42)
 
 # Загрузка данных
 def load_data(filename):
